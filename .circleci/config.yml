@@ -1,10 +1,18 @@
 version: 2
 jobs: 
   build:
-    working_directory: ~/tmp
+    working_directory: E:/code/react/redux/circleCIApp/
     docker:
       - image: circleci/node: 8
     steps:
       - checkout
+      - restore_cache:
+        keys:
+        - v1-dependencies -{{ checksum "package.json" }}
+        - v1-dependencies-
       - run: npm install
+      - save_cache:
+        paths:
+          - node_modules
+        key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm test
